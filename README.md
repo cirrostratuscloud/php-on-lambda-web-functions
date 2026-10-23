@@ -65,7 +65,7 @@ Everything is driven by the scripts in `scripts/` (also exposed as npm scripts).
 
 ```bash
 # 1. Fetch a static Linux PHP binary into bin/php.
-#    Defaults to the newest 8.3.x for linux/arm64 (matching an arm64 function).
+#    Always linux/aarch64 — Web Functions are Arm64-only. Defaults to newest 8.3.x.
 npm run fetch-php
 
 # 2. Deploy. Creates the Web Function, its first revision and endpoint, and on
@@ -79,18 +79,12 @@ NAME=php-web-poc npm run cleanup           # deletes the Web Function
 NAME=php-web-poc scripts/cleanup.sh --all  # also sweeps role, S3 objects, logs
 ```
 
-### Architecture must match
+### Architecture: Arm64 only
 
-The function defaults to **arm64**, so the PHP binary must be `linux/aarch64`
-(the default). If you deploy the function as x86_64, fetch a matching binary:
-
-```bash
-TARGET_ARCH=x86_64 npm run fetch-php
-```
-
-A mismatch is the most likely failure — the symptom is the shim staying up
-while every request returns 502/503 because PHP never started. Check CloudWatch
-for the `php-shim` log lines (`spawning php`, `php is ready`, `php exited`).
+Web Functions run **exclusively on Arm64** (Graviton) — there's no architecture
+setting to choose, unlike regular Lambda. So the PHP binary is always
+`linux/aarch64`, which is what `fetch-php.sh` gets. There's nothing to match or
+configure; just don't substitute an x86_64 binary (it won't run).
 
 ### Fetch options
 
