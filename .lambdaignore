@@ -1,0 +1,9 @@
+# Keep the deployment zip lean. These never need to ship to Lambda.
+.git
+.gitignore
+.lambdaignore
+README.md
+scripts/
+*.zip
+*.md
+.DS_Store

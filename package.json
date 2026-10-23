@@ -1,0 +1,17 @@
+{
+  "name": "php-on-lambda-web-functions",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PoC: run PHP inside an AWS Lambda Web Function (Node.js-only runtime) via a Node shim that spawns and reverse-proxies PHP's built-in server.",
+  "main": "index.js",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "fetch-php": "scripts/fetch-php.sh",
+    "build": "scripts/build-zip.sh",
+    "deploy": "scripts/deploy.sh",
+    "cleanup": "scripts/cleanup.sh",
+    "start": "node index.js"
+  }
+}

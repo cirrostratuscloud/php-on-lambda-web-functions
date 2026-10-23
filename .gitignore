@@ -1,0 +1,13 @@
+# Fetched build artifact — a ~12 MB static PHP binary.
+# Regenerated on demand by scripts/fetch-php.sh, so it should never be committed.
+/bin/
+
+# Build output
+/function.zip
+*.zip
+
+# Node
+/node_modules/
+
+# OS cruft
+.DS_Store
