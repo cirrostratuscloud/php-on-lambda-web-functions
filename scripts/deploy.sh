@@ -33,8 +33,19 @@ if [ ! -f bin/php ]; then
   exit 1
 fi
 
-# Sanity check: the deploy command must exist in this CLI build.
-if ! aws lambda-web help >/dev/null 2>&1; then
+# Sanity check: the `lambda-web deploy` command must exist in this CLI build.
+#
+# NOTE: do NOT probe with `aws lambda-web help` (or `... deploy help`). The
+# help/mandoc renderer crashes with an IndexError in _send_output_to_pager on
+# some CLI v2 builds, exiting non-zero even though the command group works
+# perfectly. That false negative is what makes this script wrongly claim the
+# CLI is outdated.
+#
+# Instead, run `deploy` with no args. argparse validates the subcommand before
+# doing anything: a known subcommand fails complaining about the required
+# --name, while an unknown one reports "invalid choice". Grep for that
+# distinction rather than relying on the exit code (both are non-zero).
+if aws lambda-web deploy 2>&1 | grep -qi 'invalid choice'; then
   cat >&2 <<'EOF'
 ERROR: `aws lambda-web` is not available in your AWS CLI.
 Update to a CLI v2 release that includes Web Functions:
